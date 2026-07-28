@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tudo sobre Teste de Software</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* VARIÁVEIS DE TEMA ESCURO (PADRÃO) */
+    :root {
+      --primary: #3b82f6;
+      --primary-gradient: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      --bg: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --quiz-card: rgba(15, 23, 42, 0.6);
+      --btn-bg: rgba(30, 41, 59, 0.9);
+      --btn-hover: rgba(51, 65, 85, 0.9);
+      --correct-bg: rgba(34, 197, 94, 0.15);
+      --correct-border: #22c55e;
+      --correct-text: #4ade80;
+      --incorrect-bg: rgba(239, 68, 68, 0.15);
+      --incorrect-border: #ef4444;
+      --incorrect-text: #f87171;
+    }
+
+    /* VARIÁVEIS DE TEMA CLARO */
+    [data-theme="light"] {
+      --bg: #f1f5f9;
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --card-border: rgba(0, 0, 0, 0.08);
+      --text: #0f172a;
+      --text-muted: #475569;
+      --quiz-card: rgba(241, 245, 249, 0.8);
+      --btn-bg: #ffffff;
+      --btn-hover: #e2e8f0;
+      --correct-bg: rgba(34, 197, 94, 0.2);
+      --correct-border: #16a34a;
+      --correct-text: #15803d;
+      --incorrect-bg: rgba(239, 68, 68, 0.2);
+      --incorrect-border: #dc2626;
+      --incorrect-text: #b91c1c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(124, 58, 237, 0.12) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text);
+      line-height: 1.6;
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 850px;
+      margin: 0 auto;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 20px;
+    }
+
+    .theme-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      padding: 10px 18px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .theme-btn:hover {
+      transform: scale(1.03);
+    }
+
+    header {
+      text-align: center;
+      padding: 45px 25px;
+      background: var(--primary-gradient);
+      border-radius: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 15px 25px -5px rgba(0,0,0,0.25);
+    }
+
+    header h1 {
+      font-size: 2.3rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      font-size: 1.05rem;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
+    }
+
+    section {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      padding: 30px;
+      border-radius: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 8px 16px -2px rgba(0,0,0,0.15);
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h2::before {
+      content: '';
+      display: inline-block;
+      width: 5px;
+      height: 22px;
+      background: var(--primary);
+      border-radius: 4px;
+    }
+
+    p, li {
+      color: var(--text-muted);
+      font-size: 1.02rem;
+    }
+
+    ul {
+      margin-left: 20px;
+      margin-top: 10px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    /* ESTILO DE TABELA */
+    .table-container {
+      overflow-x: auto;
+      margin-top: 15px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    th {
+      color: var(--text);
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    td {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* VÍDEO RESPONSIVO */
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 14px;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      background: #000;
+      margin-top: 15px;
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    /* GAME DE QUIZ */
+    .game-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+
+    .score-badge {
+      background: var(--primary-gradient);
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.95rem;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 8px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--primary-gradient);
+      transition: width 0.3s ease;
+    }
+
+    .quiz-card {
+      background: var(--quiz-card);
+      border-radius: 16px;
+      padding: 25px;
+      border: 1px solid var(--card-border);
+    }
+
+    #question {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .quiz-option {
+      display: block;
+      width: 100%;
+      padding: 15px 18px;
+      margin: 10px 0;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      background: var(--btn-bg);
+      color: var(--text);
+      cursor: pointer;
+      text-align: left;
+      font-size: 1rem;
+      font-family: inherit;
+      font-weight: 500;
+    }
+
+    .quiz-option:hover:not(:disabled) {
+      background: var(--btn-hover);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .quiz-option:disabled { cursor: not-allowed; }
+
+    .correct {
+      background-color: var(--correct-bg) !important;
+      border-color: var(--correct-border) !important;
+      color: var(--correct-text) !important;
+      font-weight: 700;
+    }
+
+    .incorrect {
+      background-color: var(--incorrect-bg) !important;
+      border-color: var(--incorrect-border) !important;
+      color: var(--incorrect-text) !important;
+      font-weight: 700;
+    }
+
+    #quiz-result {
+      font-weight: 600;
+      margin-top: 15px;
+      font-size: 1rem;
+      padding: 12px;
+      border-radius: 10px;
+      display: none;
+    }
+
+    #quiz-result.visible { display: block; }
+
+    .restart-btn {
+      margin-top: 15px;
+      background: var(--primary-gradient);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+    }
+
+    .restart-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 15px 10px; }
+      header h1 { font-size: 1.8rem; }
+      section { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- ALTERNADOR DE TEMA -->
+  <div class="top-bar">
+    <button class="theme-btn" id="theme-toggle" onclick="toggleTheme()">
+      <span id="theme-icon">🌙</span> <span id="theme-text">Modo Escuro</span>
+    </button>
+  </div>
+
+  <header>
+    <h1>Engenharia de Software: Testes & Qualidade</h1>
+    <p>Trabalho em Dupla</p>
+  </header>
+
+  <!-- 1. O QUE É TESTE DE SOFTWARE -->
+  <section>
+    <h2>1. O que é Teste de Software?</h2>
+    <p>É o processo de execução de uma aplicação com o objetivo de encontrar falhas (*bugs*), verificar se os requisitos especificados foram atendidos e avaliar a qualidade técnica e funcional do sistema antes que ele chegue ao usuário final.</p>
+  </section>
+
+  <!-- 2. QUAL A IMPORTÂNCIA DE TESTAR -->
+  <section>
+    <h2>2. Qual a Importância de Testar?</h2>
+    <p>Testar garante que a aplicação seja confiável, segura e eficiente. Os principais motivos para testar são:</p>
+    <ul>
+      <li><strong>Redução de Custos:</strong> Encontrar um erro no início do desenvolvimento pode custar até 100 vezes menos do que corrigi-lo após o lançamento.</li>
+      <li><strong>Segurança:</strong> Protege dados confidenciais dos usuários contra invasões.</li>
+      <li><strong>Qualidade e UX:</strong> Garante estabilidade e boa experiência para quem usa o sistema.</li>
+    </ul>
+  </section>
+
+  <!-- 3. EXEMPLOS DE FALHAS HISTÓRICAS -->
+  <section>
+    <h2>3. Exemplos de Falhas Famosas em Testes</h2>
+    <p>Sistemas que apresentaram falhas graves de teste ou negligência antes da implantação:</p>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Sistema / Caso</th>
+            <th>Causa do Erro</th>
+            <th>Consequência</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Ariane 5 (1996)</strong></td>
+            <td>Estouro de memória por conversão incorreta de dados (64 para 16 bits).</td>
+            <td>Foguete explodiu 37s após o lançamento. Prejuízo de US$ 370 milhões.</td>
+          </tr>
+          <tr>
+            <td><strong>Mars Climate Orbiter (1999)</strong></td>
+            <td>Incompatibilidade entre unidades de medida (sistema imperial vs. métrico).</td>
+            <td>Sonda se destruiu na atmosfera de Marte. Prejuízo de US$ 327 milhões.</td>
+          </tr>
+          <tr>
+            <td><strong>Knight Capital (2012)</strong></td>
+            <td>Código de teste antigo mantido ativado em ambiente de produção.</td>
+            <td>Execução contínua de ordens de compra erradas. Perda de US$ 440 mi em 45 min.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 4. TIPOS DE TESTE DE SOFTWARE -->
+  <section>
+    <h2>4. Tipos de Teste de Software</h2>
+    <p>Os testes são divididos em diferentes níveis e finalidades:</p>
+    <ul>
+      <li><strong>Teste Unitário:</strong> Testa pequenas partes do código de forma isolada (ex: uma única função).</li>
+      <li><strong>Teste de Integração:</strong> Avalia como diferentes módulos do código funcionam juntos.</li>
+      <li><strong>Teste Funcional:</strong> Valida o que o sistema faz (ex: login, carrinho de compras).</li>
+      <li><strong>Teste Não-Funcional:</strong> Valida como o sistema se comporta sob estresse, carga e segurança.</li>
+    </ul>
+  </section>
+
+  <!-- 5. VÍDEO AULA CURTA -->
+  <section>
+    <h2>5. Vídeo Aula Resumida</h2>
+    <p>Assista a este explicativo rápido (3 minutos) sobre os conceitos essenciais do teste de software:</p>
+    <div class="video-container">
+      <iframe 
+        src="https://www.youtube.com/embed/exof9oWgIIk" 
+        title="Vídeo Curto: O que é Teste de Software?" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen>
+      </iframe>
+    </div>
+  </section>
+
+  <!-- 6. QUIZ INTERATIVO / GAME -->
+  <section>
+    <div class="game-header">
+      <h2>6. Quiz Interativo</h2>
+      <div class="score-badge">Pontuação: <span id="score-display">0</span> pts</div>
+    </div>
+    
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progress-fill"></div>
+    </div>
+
+    <div class="quiz-card" id="quiz-container">
+      <p id="question">Carregando pergunta...</p>
+      <div id="options"></div>
+      <div id="quiz-result"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+  /* ALTERNADOR DE TEMA (CLARO / ESCURO) */
+  function toggleTheme() {
+    const body = document.body;
+    const themeIcon = document.getElementById("theme-icon");
+    const themeText = document.getElementById("theme-text");
+
+    if (body.getAttribute("data-theme") === "light") {
+      body.removeAttribute("data-theme");
+      themeIcon.innerText = "🌙";
+      themeText.innerText = "Modo Escuro";
+    } else {
+      body.setAttribute("data-theme", "light");
+      themeIcon.innerText = "☀️";
+      themeText.innerText = "Modo Claro";
+    }
+  }
+
+  /* LÓGICA DO QUIZ INTERATIVO */
+  const questions = [
+    {
+      q: "O que é Teste de Software?",
+      options: [
+        "Apenas uma etapa opcional de design visual", 
+        "Processo de executar um sistema para encontrar falhas e garantir a qualidade", 
+        "Método de criar códigos sem precisar de programadores", 
+        "Uma ferramenta exclusiva para formatar computadores"
+      ],
+      answer: 1
+    },
+    {
+      q: "Qual era a causa do erro no lançamento do foguete Ariane 5 em 1996?",
+      options: [
+        "Falta de combustível", 
+        "Conversão incorreta de tipo de dado (64 bits para 16 bits)", 
+        "Ataque cibernético", 
+        "Falha nos motores"
+      ],
+      answer: 1
+    },
+    {
+      q: "Por que testar no início do projeto é mais benéfico?",
+      options: [
+        "Porque o código fica mais bonito", 
+        "Porque corrigir erros na fase inicial é até 100x mais barato", 
+        "Não traz benefícios, o teste deve ser feito só no final", 
+        "Porque elimina a necessidade de programar"
+      ],
+      answer: 1
+    },
+    {
+      q: "Qual tipo de teste avalia unidades individuais do código isoladamente?",
+      options: [
+        "Teste de Carga", 
+        "Teste de Usabilidade", 
+        "Teste Unitário", 
+        "Teste de Sistema"
+      ],
+      answer: 2
+    },
+    {
+      q: "O que causou a destruição da sonda Mars Climate Orbiter em 1999?",
+      options: [
+        "Vazamento de combustível", 
+        "Incompatibilidade entre unidades de medida (sistema imperial vs. métrico)", 
+        "Colisão com um asteroide", 
+        "Queda na conexão Wi-Fi"
+      ],
+      answer: 1
+    }
+  ];
+
+  let currentQ = 0;
+  let score = 0;
+
+  function loadQuestion() {
+    const questionEl = document.getElementById("question");
+    const quizResultEl = document.getElementById("quiz-result");
+    const optsContainer = document.getElementById("options");
+    const progressFill = document.getElementById("progress-fill");
+
+    if (!questionEl || !optsContainer) return;
+
+    if (quizResultEl) {
+      quizResultEl.innerText = "";
+      quizResultEl.classList.remove("visible");
+    }
+
+    const progressPercent = (currentQ / questions.length) * 100;
+    if (progressFill) progressFill.style.width = `${progressPercent}%`;
+
+    // TELA FINAL COM BOTÃO JOGAR DE NOVO
+    if (currentQ >= questions.length) {
+      if (progressFill) progressFill.style.width = "100%";
+      document.getElementById("quiz-container").innerHTML = `
+        <h3 style="font-size:1.6rem; margin-bottom:10px;">🎮 Quiz Finalizado!</h3>
+        <p style="margin-bottom:20px; font-size:1.1rem;">Sua pontuação final foi: <strong style="color:var(--primary); font-size:1.4rem;">${score * 100} pts</strong> (${score} de ${questions.length} certas).</p>
+        <button class="restart-btn" onclick="restartGame()">🔄 Jogar de Novo</button>
+      `;
+      return;
+    }
+
+    const qData = questions[currentQ];
+    questionEl.innerText = `${currentQ + 1}. ${qData.q}`;
+    optsContainer.innerHTML = "";
+
+    qData.options.forEach((opt, idx) => {
+      const btn = document.createElement("button");
+      btn.className = "quiz-option";
+      btn.innerText = opt;
+      btn.onclick = () => checkAnswer(idx, btn);
+      optsContainer.appendChild(btn);
+    });
+  }
+
+  function checkAnswer(selected, btn) {
+    const correct = questions[currentQ].answer;
+    const buttons = document.querySelectorAll(".quiz-option");
+    const quizResult = document.getElementById("quiz-result");
+    const scoreDisplay = document.getElementById("score-display");
+
+    buttons.forEach(b => b.disabled = true);
+
+    if (selected === correct) {
+      btn.classList.add("correct");
+      btn.innerText += " ✓ (Correto!)";
+      score++;
+      if (scoreDisplay) scoreDisplay.innerText = score * 100;
+
+      if (quizResult) {
+        quizResult.style.backgroundColor = "rgba(34, 197, 94, 0.15)";
+        quizResult.style.color = "var(--correct-text)";
+        quizResult.style.border = "1px solid var(--correct-border)";
+        quizResult.innerText = " Mandou bem! Resposta correta (+100 pts)";
+        quizResult.classList.add("visible");
+      }
+    } else {
+      btn.classList.add("incorrect");
+      btn.innerText += " ✗ (Incorreto!)";
+      
+      if (buttons[correct]) {
+        buttons[correct].classList.add("correct");
+        buttons[correct].innerText += " ✓ (Resposta correta!)";
+      }
+      
+      if (quizResult) {
+        quizResult.style.backgroundColor = "rgba(239, 68, 68, 0.15)";
+        quizResult.style.color = "var(--incorrect-text)";
+        quizResult.style.border = "1px solid var(--incorrect-border)";
+        quizResult.innerText = " Ops! Resposta incorreta. A opção certa está em verde.";
+        quizResult.classList.add("visible");
+      }
+    }
+
+    setTimeout(() => {
+      currentQ++;
+      loadQuestion();
+    }, 2500);
+  }
+
+  function restartGame() {
+    location.reload();
+  }
+
+  window.onload = function() {
+    loadQuestion();
+  };
+</script>
+
+</body>
+</html>
